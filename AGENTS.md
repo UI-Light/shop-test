@@ -67,4 +67,5 @@ Core: live URL works: log in with Google, add to cart, log out, log in, cart int
 Stretch: detail page opens from a product card; search filters the list; core test above still passes.
 
 ## Status
-Current: not started
+Current: M0 done — Next.js 15.5.27 + Tailwind v4 + TS scaffold (App Router, no src dir), git repo on `main`, `.env.local.example` added, `.env.local` gitignored. Location: repo root.
+Next: H1 HUMAN — create Supabase project, paste URL + anon key into `.env.local`.
