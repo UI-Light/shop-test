@@ -67,8 +67,9 @@ Core: live URL works: log in with Google, add to cart, log out, log in, cart int
 Stretch: detail page opens from a product card; search filters the list; core test above still passes.
 
 ## Status
-Done: M0 (scaffold), H1 (Supabase keys), M1 (4 tables + RLS + 9 seeded products), M2 (product list page; local images in `public/products/`), H2 (Google OAuth configured), M3 (Google login/logout + the whole site gated behind login).
-OWNER CHANGE: the product list is not browsable when signed out - `/` returns 307 to `/login?next=/`, and signing out sends you back to `/login`. Only `/login` and `/auth/callback` are public.
-Note: the M1 DB policy "products readable by all" is unchanged, so the anon key can still read products through the API. Ask if you also want that restricted to signed-in users.
-Verified: signed-out `/`, `/cart`, `/checkout` all 307 -> `/login?next=...`; `/login` returns 200 with the Google button and no product data; `/auth/callback` without a code -> `/login?error=...`.
-Current: M4 next - DB-backed cart (add / change quantity / remove) + `/cart` page.
+Done: M0 (scaffold), H1 (Supabase keys), M1 (schema + RLS + 9 products), M2 (product list), H2 (Google OAuth), M3 (login/logout, whole site gated behind login), M4 (DB-backed cart: Add to cart on each card, `/cart` with +/- and Remove, header cart count), M5 (checkout summary + Place order, order + order_items saved, cart cleared, `/orders/[id]` confirmation).
+Images fixed: each product image now contains a real line drawing of the product (regenerate with `node scripts/generate-placeholder-images.mjs`).
+Verified: lint + build clean; signed-out `/`, `/cart`, `/checkout`, `/orders/<id>` all 307 -> `/login?next=...`.
+NEEDS ONE SQL PASTE: `supabase/schema.sql` gained an "orders: delete own" policy (used to roll back a half-failed checkout) - re-run the file in the SQL Editor.
+Note: the M1 policy "products readable by all" is unchanged, so the anon key can still read products through the API even though the site is gated.
+Current: H3 (Mailgun) HUMAN step, then M6 - send the confirmation email server-side; email failure must NOT fail the order.
