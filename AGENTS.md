@@ -67,6 +67,6 @@ Core: live URL works: log in with Google, add to cart, log out, log in, cart int
 Stretch: detail page opens from a product card; search filters the list; core test above still passes.
 
 ## Status
-Done: M0 (scaffold, Next 15.5.27 + Tailwind v4 + TS, on `main`), H1 (Supabase project + keys in `.env.local`), M1 (`supabase/schema.sql` run: 4 tables, RLS on, 9 seed products).
-Verified live via REST: anon reads 9 products (count 0-8/9); anon-role insert into cart_items rejected with 42501 (RLS); anon delete on products affects 0 rows (count still 9); anon sees no cart/orders rows.
-Current: M2 next — product list page with Add to cart.
+Done: M0 (scaffold), H1 (Supabase keys in `.env.local`), M1 (4 tables + RLS + 9 seeded products, verified via REST), M2 (product list page at `/`: server-rendered grid of 9 cards, price formatter, local placeholder images in `public/products/`).
+Note: image_url in the DB now points at local `/products/*.png` - re-run `supabase/schema.sql` in the SQL Editor to apply it (the seed upserts now).
+Current: M3 next - login/logout with Google. H2 is the Google OAuth HUMAN step.
