@@ -67,6 +67,6 @@ Core: live URL works: log in with Google, add to cart, log out, log in, cart int
 Stretch: detail page opens from a product card; search filters the list; core test above still passes.
 
 ## Status
-Done: M0 (scaffold), H1 (Supabase keys in `.env.local`), M1 (4 tables + RLS + 9 seeded products, verified via REST), M2 (product list page at `/`: server-rendered grid of 9 cards, price formatter, local placeholder images in `public/products/`).
-Note: image_url in the DB now points at local `/products/*.png` - re-run `supabase/schema.sql` in the SQL Editor to apply it (the seed upserts now).
-Current: M3 next - login/logout with Google. H2 is the Google OAuth HUMAN step.
+Done: M0 (scaffold), H1 (Supabase keys in `.env.local`), M1 (4 tables + RLS + 9 seeded products), M2 (product list page at `/`; images are local files in `public/products/`), H2 (Google OAuth: client in Google Cloud + provider enabled in Supabase), M3 (Google login/logout: `/login`, `/auth/callback` code exchange, middleware session refresh, `/cart` + `/checkout` protected, header shows email + Sign out).
+Verified: signed-out `/cart` and `/checkout` return 307 to `/login?next=...`; Supabase `/auth/v1/authorize?provider=google` returns 302 to accounts.google.com.
+Current: M4 next - DB-backed cart (add / change quantity / remove) + `/cart` page.
