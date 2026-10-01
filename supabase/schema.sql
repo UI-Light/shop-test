@@ -102,18 +102,24 @@ create policy "order_items: insert own"
 
 -- ------------------------------------------------------------ seed: products -
 -- 9 demo products. Prices are in cents, so 2400 = 24.00.
--- Images are generic placeholders - swap in real product photos later.
+-- The images are files in this repo (public/products/*.png); regenerate them
+-- with: node scripts/generate-placeholder-images.mjs
+-- Re-running this file refreshes these rows, so this list is the source of truth.
 insert into public.products (id, name, description, price_cents, image_url) values
-  ('10000000-0000-4000-8000-000000000001', 'Everyday Cotton T-Shirt', 'Soft 100% cotton tee with a relaxed fit.',           2400, 'https://picsum.photos/seed/tshirt/600/600'),
-  ('10000000-0000-4000-8000-000000000002', 'Ceramic Mug',             'Stoneware mug, holds 350 ml, dishwasher safe.',      1500, 'https://picsum.photos/seed/mug/600/600'),
-  ('10000000-0000-4000-8000-000000000003', 'Linen Tote Bag',          'Roomy natural linen tote with two handles.',         2800, 'https://picsum.photos/seed/tote/600/600'),
-  ('10000000-0000-4000-8000-000000000004', 'Stainless Water Bottle',  'Insulated 500 ml bottle, keeps drinks cold.',        3200, 'https://picsum.photos/seed/bottle/600/600'),
-  ('10000000-0000-4000-8000-000000000005', 'Wool Beanie',             'Warm ribbed knit beanie, one size fits most.',       1900, 'https://picsum.photos/seed/beanie/600/600'),
-  ('10000000-0000-4000-8000-000000000006', 'Leather Notebook',        'A5 refillable notebook with a soft leather cover.',  3400, 'https://picsum.photos/seed/notebook/600/600'),
-  ('10000000-0000-4000-8000-000000000007', 'Bamboo Desk Organiser',   'Five compartments to keep a desk tidy.',             2600, 'https://picsum.photos/seed/desk/600/600'),
-  ('10000000-0000-4000-8000-000000000008', 'Enamel Pin Set',          'Set of three hard-enamel pins.',                     1200, 'https://picsum.photos/seed/pins/600/600'),
-  ('10000000-0000-4000-8000-000000000009', 'Canvas Apron',            'Heavyweight canvas apron with a front pocket.',      4200, 'https://picsum.photos/seed/apron/600/600')
-on conflict (id) do nothing;
+  ('10000000-0000-4000-8000-000000000001', 'Everyday Cotton T-Shirt', 'Soft 100% cotton tee with a relaxed fit.',           2400, '/products/tshirt.png'),
+  ('10000000-0000-4000-8000-000000000002', 'Ceramic Mug',             'Stoneware mug, holds 350 ml, dishwasher safe.',      1500, '/products/mug.png'),
+  ('10000000-0000-4000-8000-000000000003', 'Linen Tote Bag',          'Roomy natural linen tote with two handles.',         2800, '/products/tote.png'),
+  ('10000000-0000-4000-8000-000000000004', 'Stainless Water Bottle',  'Insulated 500 ml bottle, keeps drinks cold.',        3200, '/products/bottle.png'),
+  ('10000000-0000-4000-8000-000000000005', 'Wool Beanie',             'Warm ribbed knit beanie, one size fits most.',       1900, '/products/beanie.png'),
+  ('10000000-0000-4000-8000-000000000006', 'Leather Notebook',        'A5 refillable notebook with a soft leather cover.',  3400, '/products/notebook.png'),
+  ('10000000-0000-4000-8000-000000000007', 'Bamboo Desk Organiser',   'Five compartments to keep a desk tidy.',             2600, '/products/desk.png'),
+  ('10000000-0000-4000-8000-000000000008', 'Enamel Pin Set',          'Set of three hard-enamel pins.',                     1200, '/products/pins.png'),
+  ('10000000-0000-4000-8000-000000000009', 'Canvas Apron',            'Heavyweight canvas apron with a front pocket.',      4200, '/products/apron.png')
+on conflict (id) do update set
+  name        = excluded.name,
+  description = excluded.description,
+  price_cents = excluded.price_cents,
+  image_url   = excluded.image_url;
 
 -- ----------------------------------------------------------------- check it --
 -- Run this line after the script; you should get 9.
