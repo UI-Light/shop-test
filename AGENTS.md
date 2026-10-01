@@ -67,5 +67,6 @@ Core: live URL works: log in with Google, add to cart, log out, log in, cart int
 Stretch: detail page opens from a product card; search filters the list; core test above still passes.
 
 ## Status
-Current: M0 done — Next.js 15.5.27 + Tailwind v4 + TS scaffold (App Router, no src dir), git repo on `main`, `.env.local.example` added, `.env.local` gitignored. Location: repo root.
-Next: H1 HUMAN — create Supabase project, paste URL + anon key into `.env.local`.
+Done: M0 (scaffold, Next 15.5.27 + Tailwind v4 + TS, on `main`), H1 (Supabase project + keys in `.env.local`), M1 (`supabase/schema.sql` run: 4 tables, RLS on, 9 seed products).
+Verified live via REST: anon reads 9 products (count 0-8/9); anon-role insert into cart_items rejected with 42501 (RLS); anon delete on products affects 0 rows (count still 9); anon sees no cart/orders rows.
+Current: M2 next — product list page with Add to cart.
