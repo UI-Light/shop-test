@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+/*
+ * DESIGN.md: clean, minimal, light theme only, system font stack.
+ * Colours come from Tailwind's defaults:
+ *   white background · slate-900 text · indigo-600 accent · slate-200 borders
+ */
+@theme {
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, "Noto Sans", sans-serif;
+}
