@@ -1,13 +1,14 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-/** Pages that need a signed-in user. */
-const PROTECTED_PATHS = ["/cart", "/checkout"];
+/** The only pages a signed-out visitor may open. */
+const PUBLIC_PATHS = ["/login", "/auth/callback"];
 
 /**
  * Runs before every page. Its jobs:
  *  1. refresh the Supabase session cookie when the token expires, and
- *  2. send signed-out visitors from a protected page to /login.
+ *  2. send signed-out visitors to /login (everything except /login itself
+ *     requires an account - the shop is not browsable when signed out).
  */
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -45,11 +46,11 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const { pathname } = request.nextUrl;
-  const needsLogin = PROTECTED_PATHS.some(
+  const isPublic = PUBLIC_PATHS.some(
     (path) => pathname === path || pathname.startsWith(`${path}/`),
   );
 
-  if (!user && needsLogin) {
+  if (!user && !isPublic) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.search = `?next=${encodeURIComponent(pathname)}`;

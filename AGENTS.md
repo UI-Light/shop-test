@@ -11,7 +11,7 @@ Next.js (App Router, TypeScript), Tailwind, Supabase (Postgres + Auth w/ Google)
 
 ## CORE (must have)
 - Login/logout with Google (via Supabase Auth)
-- Product list (8-10 seeded products), cards with Add to cart
+- Product list (8-10 seeded products), cards with Add to cart. OWNER CHANGE: the whole site requires login - signed-out visitors only ever see /login.
 - Cart: add, change quantity, remove. Stored in DB per user, persists across logout/login. Must be logged in to add.
 - Checkout page: order summary + Place order (mock payment, no real card)
 - On order: save order + items, clear cart, show confirmation page, send confirmation email via Mailgun. Email failure must NOT fail the order.
@@ -67,6 +67,8 @@ Core: live URL works: log in with Google, add to cart, log out, log in, cart int
 Stretch: detail page opens from a product card; search filters the list; core test above still passes.
 
 ## Status
-Done: M0 (scaffold), H1 (Supabase keys in `.env.local`), M1 (4 tables + RLS + 9 seeded products), M2 (product list page at `/`; images are local files in `public/products/`), H2 (Google OAuth: client in Google Cloud + provider enabled in Supabase), M3 (Google login/logout: `/login`, `/auth/callback` code exchange, middleware session refresh, `/cart` + `/checkout` protected, header shows email + Sign out).
-Verified: signed-out `/cart` and `/checkout` return 307 to `/login?next=...`; Supabase `/auth/v1/authorize?provider=google` returns 302 to accounts.google.com.
+Done: M0 (scaffold), H1 (Supabase keys), M1 (4 tables + RLS + 9 seeded products), M2 (product list page; local images in `public/products/`), H2 (Google OAuth configured), M3 (Google login/logout + the whole site gated behind login).
+OWNER CHANGE: the product list is not browsable when signed out - `/` returns 307 to `/login?next=/`, and signing out sends you back to `/login`. Only `/login` and `/auth/callback` are public.
+Note: the M1 DB policy "products readable by all" is unchanged, so the anon key can still read products through the API. Ask if you also want that restricted to signed-in users.
+Verified: signed-out `/`, `/cart`, `/checkout` all 307 -> `/login?next=...`; `/login` returns 200 with the Google button and no product data; `/auth/callback` without a code -> `/login?error=...`.
 Current: M4 next - DB-backed cart (add / change quantity / remove) + `/cart` page.

@@ -30,11 +30,12 @@ function svgFor(label) {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
 
-  // Colours follow DESIGN.md: slate-100 background, slate-900 text, indigo-600 accent.
+  // Colours follow DESIGN.md: slate-200 background so the image is clearly
+  // visible on the white card, slate-900 text, indigo-600 accent.
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${SIZE}" height="${SIZE}" viewBox="0 0 ${SIZE} ${SIZE}">
-  <rect width="${SIZE}" height="${SIZE}" fill="#f8fafc"/>
-  <circle cx="300" cy="260" r="120" fill="#e2e8f0"/>
-  <circle cx="300" cy="260" r="120" fill="none" stroke="#4f46e5" stroke-width="4"/>
+  <rect width="${SIZE}" height="${SIZE}" fill="#e2e8f0"/>
+  <circle cx="300" cy="255" r="118" fill="#ffffff"/>
+  <circle cx="300" cy="255" r="118" fill="none" stroke="#4f46e5" stroke-width="5"/>
   <text x="300" y="470" font-family="Helvetica, Arial, sans-serif" font-size="30"
         font-weight="bold" fill="#0f172a" text-anchor="middle">${safe}</text>
   <rect x="0" y="${SIZE - 10}" width="${SIZE}" height="10" fill="#4f46e5"/>

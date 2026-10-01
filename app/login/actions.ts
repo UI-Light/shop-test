@@ -39,9 +39,9 @@ export async function signInWithGoogle(formData: FormData) {
   }
 }
 
-/** Signs the user out and returns to the shop. */
+/** Signs the user out and returns them to the login page. */
 export async function signOut() {
   const supabase = await createClient();
   await supabase.auth.signOut();
-  redirect("/");
+  redirect("/login");
 }
