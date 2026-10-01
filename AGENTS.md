@@ -35,7 +35,7 @@ Core: / products · /cart · /checkout · /orders/[id] confirmation · /login
 Stretch: /products/[id] detail · search box on /
 
 ## Agent rules (context is small, be brief)
-- Read this file and DESIGN.md first. Don't re-explain them.
+- Read this file and DESIGN.md first - DESIGN.md owns every visual, motion and feedback rule (accent colour, cards, hover states, buttons, pending states, toasts). Don't re-explain either file.
 - Work ONE milestone at a time. Show only changed files. No re-printing unchanged code.
 - After each milestone: max 5 lines plain-language explanation + exact run/test command, then STOP and wait for me.
 - HUMAN steps: stop, give numbered click-by-click instructions with exact field names and what to copy where. Wait for "done". Never ask me to paste secrets in chat; tell me which .env.local variable to fill.
