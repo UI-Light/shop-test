@@ -89,6 +89,13 @@ create policy "orders: insert own"
   on public.orders for insert
   with check (auth.uid() = user_id);
 
+-- orders: you can delete your own order. Used to roll back a checkout that
+-- failed half way through, so we never leave an empty order behind.
+drop policy if exists "orders: delete own" on public.orders;
+create policy "orders: delete own"
+  on public.orders for delete
+  using (auth.uid() = user_id);
+
 -- order_items: a row belongs to you when its parent order belongs to you.
 drop policy if exists "order_items: read own" on public.order_items;
 create policy "order_items: read own"
