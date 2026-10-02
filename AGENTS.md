@@ -76,4 +76,8 @@ Verified: lint + build clean; signed-out /, /cart, /checkout, /orders/<id> and /
 Note: the M1 policy "products readable by all" is unchanged, so the anon key can still read products through the API even though the site is gated.
 Mailgun (H3) is set up: MAILGUN_API_KEY + MAILGUN_DOMAIN are in .env.local, the key is valid (GET /v3/domains -> 200) and the domain is an active sandbox on the US region, so MAILGUN_API_BASE is not needed.
 M6 code is written (lib/mail.ts + a call from placeOrder) but the email will NOT send yet: Mailgun answered 403 "Free accounts are for test purposes only. Please upgrade or add the address to your authorized recipients." The owner still has to add their own Gmail address under the sandbox domain -> Authorized Recipients. That is the only thing left before an order email can arrive.
-Current: add the authorized recipient, then place a real order to confirm the email lands. After that: M7, H4, M8.
+M6 VERIFIED END TO END: the owner placed a real order and the Mailgun confirmation email arrived (in the spam folder, which is normal for a sandbox domain).
+Fixed after that: the confirmation page drew its tick as a literal "&check;" character, which renders as an empty box on any machine whose fonts lack U+2713 - it is now an inline SVG. An amber notice on /orders/<id> tells the shopper to check their spam folder.
+M8 done: README.md rewritten (76 lines) - what it does, setup, the four env vars, notes on photos/email/security, and what was learned. The create-next-app boilerplate is gone.
+Logout confirmed working as intended: signOut() calls Supabase signOut() and redirects to /login. The cart survives because cart_items is keyed by user_id in the database, not held in the session. Nothing to change.
+Current: H4 HUMAN step - push to GitHub, deploy on Vercel, add the env vars there, then add the live URL to the Supabase and Google redirect allowlists.
