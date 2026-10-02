@@ -37,7 +37,7 @@ const PICKS = {
   notebook: "Legal pad and pencil.jpg",
   desk: "Skolni penal.jpg",
   pins: "Deep Space Semifinals Medal and Pins.jpg",
-  apron: "Apron (AM 12676-1).jpg",
+  apron: "Woodworking apron.webp",
 };
 
 /** Removes the HTML tags Commons puts inside its credit fields. */
