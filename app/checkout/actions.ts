@@ -1,8 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { cartTotalCents, getCart } from "@/lib/cart";
+import { cartTotalCents, getCart, type CartLine } from "@/lib/cart";
+import { sendOrderConfirmation } from "@/lib/mail";
 import { createClient } from "@/lib/supabase/server";
 
 const TRY_AGAIN = "We could not place your order. Please try again.";
@@ -62,7 +64,71 @@ export async function placeOrder() {
   // Order saved - empty the cart.
   await supabase.from("cart_items").delete().eq("user_id", user.id);
 
+  // The order is already safely in the database by this point, so the email is
+  // sent afterwards on purpose. If Mailgun is slow, down, or misconfigured the
+  // shopper still gets their order and still sees the confirmation page - the
+  // email just does not arrive. `sendOrderConfirmation` never throws, so there
+  // is nothing here that can undo the order.
+  await emailConfirmation({ user, orderId: order.id, lines, total });
+
   revalidatePath("/");
   revalidatePath("/cart");
   redirect(`/orders/${order.id}`);
+}
+
+/**
+ * Sends the confirmation email and records what happened in the server log.
+ * Kept separate from `placeOrder` so the "email must never break the order"
+ * rule is obvious in one small place.
+ */
+async function emailConfirmation({
+  user,
+  orderId,
+  lines,
+  total,
+}: {
+  user: { email?: string | null; user_metadata?: Record<string, unknown> };
+  orderId: string;
+  lines: CartLine[];
+  total: number;
+}) {
+  if (!user.email) {
+    console.warn("[order] no email address on the account, skipped the email");
+    return;
+  }
+
+  // Google puts the full name in user_metadata, under a few possible keys.
+  const metadata = user.user_metadata ?? {};
+  const name =
+    (metadata.full_name as string | undefined) ??
+    (metadata.name as string | undefined) ??
+    null;
+
+  // Rebuild the site address from the incoming request so the email can link
+  // back to the confirmation page. Works on localhost and on Vercel.
+  const requestHeaders = await headers();
+  const host = requestHeaders.get("host");
+  const protocol = requestHeaders.get("x-forwarded-proto") ?? "http";
+  const orderUrl = host ? `${protocol}://${host}/orders/${orderId}` : undefined;
+
+  const result = await sendOrderConfirmation({
+    to: user.email,
+    name,
+    orderId,
+    totalCents: total,
+    lines: lines.map((line) => ({
+      name: line.product.name,
+      quantity: line.quantity,
+      priceCents: line.product.price_cents,
+    })),
+    orderUrl,
+  });
+
+  if (result.ok) {
+    console.log(`[order] confirmation email queued for ${user.email} (${result.id})`);
+  } else {
+    // This is the one place an email failure is allowed to be visible. The
+    // order has already been saved, so the shopper never sees this.
+    console.error(`[order] confirmation email NOT sent: ${result.error}`);
+  }
 }
