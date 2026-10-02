@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { Order, OrderItem } from "@/lib/types";
 
 export const metadata = {
-  title: "Order confirmed · Shop",
+  title: "Order confirmed",
 };
 
 /** The confirmation page shown straight after a successful checkout. */
@@ -48,12 +48,23 @@ export default async function OrderPage({
     .returns<OrderItem[]>();
 
   return (
-    <main className="mx-auto max-w-3xl px-6 py-16">
-      <h1 className="text-3xl font-semibold tracking-tight">Thank you!</h1>
-      <p className="mt-2 text-slate-600">
-        Your order is confirmed. A confirmation email is on its way.
-      </p>
-      <p className="mt-1 font-mono text-sm text-slate-500">
+    <div className="mx-auto max-w-3xl px-6 py-16">
+      <div className="flex items-center gap-3">
+        <span
+          aria-hidden="true"
+          className="grid size-10 shrink-0 place-items-center rounded-full bg-violet-100 text-lg text-violet-700"
+        >
+          &check;
+        </span>
+        <div>
+          <h1 className="text-3xl font-semibold tracking-tight">Thank you!</h1>
+          <p className="text-slate-600">
+            Your order is confirmed. A confirmation email is on its way.
+          </p>
+        </div>
+      </div>
+
+      <p className="mt-4 font-mono text-sm text-slate-500">
         Order #{order.id.slice(0, 8)}
       </p>
 
@@ -61,7 +72,8 @@ export default async function OrderPage({
         {(items ?? []).map((item) => (
           <li key={item.id} className="flex items-center justify-between gap-4 py-3">
             <span className="text-slate-700">
-              {item.name} <span className="text-slate-500">× {item.quantity}</span>
+              {item.name}{" "}
+              <span className="text-slate-500">&times; {item.quantity}</span>
             </span>
             <span className="font-medium">
               {formatPrice(item.price_cents * item.quantity)}
@@ -81,6 +93,6 @@ export default async function OrderPage({
       <Link href="/" className={`${primaryButton} mt-8`}>
         Continue shopping
       </Link>
-    </main>
+    </div>
   );
 }

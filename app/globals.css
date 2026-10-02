@@ -1,11 +1,35 @@
 @import "tailwindcss";
 
 /*
- * DESIGN.md: clean, minimal, light theme only, system font stack.
- * Colours come from Tailwind's defaults:
- *   white background · slate-900 text · indigo-600 accent · slate-200 borders
+ * DESIGN.md is the source of truth for the look: light theme only, system font
+ * stack, one violet accent. Colours come from Tailwind's defaults:
+ *   white background · slate-900 text · violet-600 accent · slate-200 borders
  */
 @theme {
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
     Arial, "Noto Sans", sans-serif;
+
+  /* Toasts fade up from the corner. Spinners use Tailwind's built-in spin. */
+  --animate-toast-in: toast-in 200ms ease-out;
+  --animate-fade-in: fade-in 150ms ease-out;
+
+  @keyframes toast-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.5rem) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 }

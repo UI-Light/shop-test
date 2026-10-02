@@ -1,16 +1,21 @@
 import Link from "next/link";
+import NavLink from "@/components/NavLink";
+import SubmitButton from "@/components/SubmitButton";
 import { signOut } from "@/app/login/actions";
 import { createClient } from "@/lib/supabase/server";
-import { primaryButton } from "@/lib/styles";
+import { primaryButton, secondaryButton } from "@/lib/styles";
 
-/** Top bar: the shop name plus who is signed in. */
+/**
+ * The bar across the top: the shop name, where to go, and who is signed in.
+ * It sticks to the top of the page while you scroll.
+ */
 export default async function SiteHeader() {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // How many items are in the cart, for the little "(2)" next to Cart.
+  // How many items are in the cart, for the little count next to Cart.
   let cartCount = 0;
   if (user) {
     const { count } = await supabase
@@ -21,33 +26,53 @@ export default async function SiteHeader() {
   }
 
   return (
-    <header className="border-b border-slate-200">
-      <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-6 py-4">
-        <Link href="/" className="font-semibold">
+    <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/85 backdrop-blur">
+      <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-3 px-6 py-3">
+        <Link
+          href="/"
+          className="flex items-center gap-2 rounded-md text-lg font-semibold tracking-tight focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-violet-600"
+        >
+          <span
+            aria-hidden="true"
+            className="grid size-7 place-items-center rounded-md bg-violet-600 text-sm font-bold text-white"
+          >
+            S
+          </span>
           Shop
         </Link>
 
-        <nav className="flex items-center gap-4 text-sm">
+        <div className="flex items-center gap-1 sm:gap-2">
+          <NavLink href="/">Products</NavLink>
+
+          <NavLink href="/cart">
+            Cart
+            {cartCount > 0 ? (
+              <span className="ml-1.5 rounded-full bg-violet-100 px-1.5 py-0.5 text-xs font-medium text-violet-700">
+                {cartCount}
+              </span>
+            ) : null}
+          </NavLink>
+
           {user ? (
             <>
-              <Link href="/cart" className="text-slate-700 hover:underline">
-                Cart{cartCount > 0 ? ` (${cartCount})` : ""}
-              </Link>
-              <span className="hidden text-slate-600 sm:inline">
+              <span className="ml-2 hidden max-w-40 truncate text-sm text-slate-600 md:inline">
                 {user.email}
               </span>
-              <form action={signOut}>
-                <button type="submit" className={primaryButton}>
+              <form action={signOut} className="ml-2">
+                <SubmitButton
+                  pendingLabel="Signing out..."
+                  className={secondaryButton}
+                >
                   Sign out
-                </button>
+                </SubmitButton>
               </form>
             </>
           ) : (
-            <Link href="/login" className={primaryButton}>
+            <Link href="/login" className={`${primaryButton} ml-2`}>
               Sign in
             </Link>
           )}
-        </nav>
+        </div>
       </div>
     </header>
   );

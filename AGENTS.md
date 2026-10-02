@@ -67,9 +67,11 @@ Core: live URL works: log in with Google, add to cart, log out, log in, cart int
 Stretch: detail page opens from a product card; search filters the list; core test above still passes.
 
 ## Status
-Done: M0 (scaffold), H1 (Supabase keys), M1 (schema + RLS + 9 products), M2 (product list), H2 (Google OAuth), M3 (login/logout, whole site gated behind login), M4 (DB-backed cart: Add to cart on each card, `/cart` with +/- and Remove, header cart count), M5 (checkout summary + Place order, order + order_items saved, cart cleared, `/orders/[id]` confirmation).
-Images fixed: each product image now contains a real line drawing of the product (regenerate with `node scripts/generate-placeholder-images.mjs`).
-Verified: lint + build clean; signed-out `/`, `/cart`, `/checkout`, `/orders/<id>` all 307 -> `/login?next=...`.
-NEEDS ONE SQL PASTE: `supabase/schema.sql` gained an "orders: delete own" policy (used to roll back a half-failed checkout) - re-run the file in the SQL Editor.
+Done: M0-M5 (all CORE up to checkout) + S1 (product page at /products/[id], linked from every card) + S2 (search box on /, case-insensitive via ?q=).
+Photos are now real photographs from Wikimedia Commons, not drawings - `node scripts/fetch-product-photos.mjs` re-downloads the exact files listed in its PICKS map and rewrites public/products/CREDITS.md (the CC BY-SA photos must be credited; the footer links to it). Whole public/products folder is 836 KB.
+Design pass: violet accent end to end, sticky SiteHeader with cart badge, new SiteFooter, rounded-xl cards with hover lift, real empty/error states, app/loading.tsx skeleton.
+Feedback: SubmitButton (useFormStatus) gives every action button a spinner + "Adding..."/"Placing order..."/"Signing out..." pending state; Toast + ActionForm raise a corner toast for add to cart, quantity change, remove and failures. Cart actions now return an ActionState instead of nothing, and addToCart honours the quantity chosen on the product page.
+Verified: lint + build clean; signed-out /, /cart, /checkout, /orders/<id> and /products/<id> all 307 -> /login?next=...; search returns the right rows for mug/MUG/%%mug%% and treats a lone % or _ as "no search".
+**NEEDS ONE SQL PASTE** - `supabase/schema.sql` must be re-run in the SQL Editor. That single paste does three things: adds the "orders: delete own" policy, points image_url at the new .jpg files, and renames 3 products to match their photos (Canvas Tote Bag, A5 Ruled Notebook, Desk Organiser). Until you run it, product images are broken because the database still points at the deleted .png files.
 Note: the M1 policy "products readable by all" is unchanged, so the anon key can still read products through the API even though the site is gated.
 Current: H3 (Mailgun) HUMAN step, then M6 - send the confirmation email server-side; email failure must NOT fail the order.

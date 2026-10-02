@@ -1,11 +1,12 @@
 import { redirect } from "next/navigation";
+import SubmitButton from "@/components/SubmitButton";
 import { signInWithGoogle } from "./actions";
 import { safeNextPath } from "@/lib/safe-redirect";
 import { primaryButton } from "@/lib/styles";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata = {
-  title: "Sign in · Shop",
+  title: "Sign in",
 };
 
 export default async function LoginPage({
@@ -27,28 +28,34 @@ export default async function LoginPage({
   }
 
   return (
-    <main className="mx-auto max-w-md px-6 py-16">
-      <h1 className="text-2xl font-semibold tracking-tight">Sign in</h1>
+    <div className="mx-auto flex max-w-md flex-col justify-center px-6 py-24">
+      <h1 className="text-3xl font-semibold tracking-tight">Sign in</h1>
       <p className="mt-2 text-slate-600">
         Use your Google account to shop and keep a cart.
       </p>
 
       {error ? (
-        <p className="mt-6 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
+        <p
+          role="alert"
+          className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900"
+        >
           {error}
         </p>
       ) : null}
 
       <form action={signInWithGoogle} className="mt-8">
         <input type="hidden" name="next" value={nextPath} />
-        <button type="submit" className={`${primaryButton} w-full`}>
+        <SubmitButton
+          pendingLabel="Opening Google..."
+          className={`${primaryButton} w-full`}
+        >
           Continue with Google
-        </button>
+        </SubmitButton>
       </form>
 
       <p className="mt-6 text-sm text-slate-600">
         The shop is only visible once you are signed in.
       </p>
-    </main>
+    </div>
   );
 }

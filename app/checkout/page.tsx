@@ -1,13 +1,15 @@
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import SubmitButton from "@/components/SubmitButton";
 import { placeOrder } from "./actions";
 import { cartTotalCents, getCart } from "@/lib/cart";
 import { formatPrice } from "@/lib/format";
-import { primaryButton } from "@/lib/styles";
+import { primaryButton, secondaryButton } from "@/lib/styles";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata = {
-  title: "Checkout · Shop",
+  title: "Checkout",
 };
 
 export default async function CheckoutPage({
@@ -30,24 +32,30 @@ export default async function CheckoutPage({
 
   if (lines.length === 0) {
     return (
-      <main className="mx-auto max-w-3xl px-6 py-16">
+      <div className="mx-auto max-w-3xl px-6 py-16">
         <h1 className="text-3xl font-semibold tracking-tight">Checkout</h1>
-        <p className="mt-4 text-slate-600">
-          Your cart is empty, so there is nothing to check out.
-        </p>
-        <Link href="/" className={`${primaryButton} mt-6`}>
-          Browse products
-        </Link>
-      </main>
+        <div className="mt-8 rounded-xl border border-slate-200 bg-slate-50 p-6">
+          <h2 className="text-lg font-medium">There is nothing to check out</h2>
+          <p className="mt-1 text-sm text-slate-600">
+            Your cart is empty. Add something first and come back.
+          </p>
+          <Link href="/" className={`${primaryButton} mt-4`}>
+            Browse products
+          </Link>
+        </div>
+      </div>
     );
   }
 
   return (
-    <main className="mx-auto max-w-3xl px-6 py-16">
+    <div className="mx-auto max-w-3xl px-6 py-16">
       <h1 className="text-3xl font-semibold tracking-tight">Checkout</h1>
 
       {error ? (
-        <p className="mt-6 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
+        <p
+          role="alert"
+          className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900"
+        >
           {error}
         </p>
       ) : null}
@@ -58,11 +66,18 @@ export default async function CheckoutPage({
         {lines.map((line) => (
           <li
             key={line.id}
-            className="flex items-center justify-between gap-4 py-3"
+            className="flex items-center gap-4 py-4"
           >
-            <span className="text-slate-700">
+            <Image
+              src={line.product.image_url}
+              alt=""
+              width={200}
+              height={200}
+              className="size-12 shrink-0 rounded-lg border border-slate-200 object-cover"
+            />
+            <span className="flex-1 text-slate-700">
               {line.product.name}{" "}
-              <span className="text-slate-500">× {line.quantity}</span>
+              <span className="text-slate-500">&times; {line.quantity}</span>
             </span>
             <span className="font-medium">
               {formatPrice(line.product.price_cents * line.quantity)}
@@ -76,21 +91,24 @@ export default async function CheckoutPage({
         <span className="font-semibold">{formatPrice(cartTotalCents(lines))}</span>
       </p>
 
-      <p className="mt-8 text-sm text-slate-600">
-        This is a practice checkout - no card is charged and nothing is shipped.
+      <p className="mt-8 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+        This is a practice checkout - no card is asked for, nothing is charged
+        and nothing is shipped.
       </p>
 
-      <form action={placeOrder} className="mt-4">
-        <button type="submit" className={primaryButton}>
-          Place order
-        </button>
-      </form>
-
-      <p className="mt-6 text-sm">
-        <Link href="/cart" className="text-slate-600 underline">
+      <div className="mt-6 flex flex-wrap items-center gap-3">
+        <form action={placeOrder}>
+          <SubmitButton
+            pendingLabel="Placing order..."
+            className={`${primaryButton} px-6`}
+          >
+            Place order
+          </SubmitButton>
+        </form>
+        <Link href="/cart" className={secondaryButton}>
           Back to cart
         </Link>
-      </p>
-    </main>
+      </div>
+    </div>
   );
 }

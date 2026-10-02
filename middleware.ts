@@ -61,8 +61,10 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Everything except Next's own assets and image files.
+  // Everything except Next's own assets and the static files in
+  // /public/products (the photos and CREDITS.md). Credits stay readable while
+  // signed out, which is what the CC BY-SA photo licences ask for.
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|products/[^/]*\\.(?:svg|png|jpg|jpeg|gif|webp|md)$).*)",
   ],
 };

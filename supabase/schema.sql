@@ -109,19 +109,19 @@ create policy "order_items: insert own"
 
 -- ------------------------------------------------------------ seed: products -
 -- 9 demo products. Prices are in cents, so 2400 = 24.00.
--- The images are files in this repo (public/products/*.png); regenerate them
--- with: node scripts/generate-placeholder-images.mjs
+-- The images are files in this repo (public/products/*.jpg); re-download them
+-- with: node scripts/fetch-product-photos.mjs
 -- Re-running this file refreshes these rows, so this list is the source of truth.
 insert into public.products (id, name, description, price_cents, image_url) values
-  ('10000000-0000-4000-8000-000000000001', 'Everyday Cotton T-Shirt', 'Soft 100% cotton tee with a relaxed fit.',           2400, '/products/tshirt.png'),
-  ('10000000-0000-4000-8000-000000000002', 'Ceramic Mug',             'Stoneware mug, holds 350 ml, dishwasher safe.',      1500, '/products/mug.png'),
-  ('10000000-0000-4000-8000-000000000003', 'Linen Tote Bag',          'Roomy natural linen tote with two handles.',         2800, '/products/tote.png'),
-  ('10000000-0000-4000-8000-000000000004', 'Stainless Water Bottle',  'Insulated 500 ml bottle, keeps drinks cold.',        3200, '/products/bottle.png'),
-  ('10000000-0000-4000-8000-000000000005', 'Wool Beanie',             'Warm ribbed knit beanie, one size fits most.',       1900, '/products/beanie.png'),
-  ('10000000-0000-4000-8000-000000000006', 'Leather Notebook',        'A5 refillable notebook with a soft leather cover.',  3400, '/products/notebook.png'),
-  ('10000000-0000-4000-8000-000000000007', 'Bamboo Desk Organiser',   'Five compartments to keep a desk tidy.',             2600, '/products/desk.png'),
-  ('10000000-0000-4000-8000-000000000008', 'Enamel Pin Set',          'Set of three hard-enamel pins.',                     1200, '/products/pins.png'),
-  ('10000000-0000-4000-8000-000000000009', 'Canvas Apron',            'Heavyweight canvas apron with a front pocket.',      4200, '/products/apron.png')
+  ('10000000-0000-4000-8000-000000000001', 'Everyday Cotton T-Shirt', 'Soft 100% cotton tee with a relaxed fit.',           2400, '/products/tshirt.jpg'),
+  ('10000000-0000-4000-8000-000000000002', 'Ceramic Mug',             'Stoneware mug, holds 350 ml, dishwasher safe.',      1500, '/products/mug.jpg'),
+  ('10000000-0000-4000-8000-000000000003', 'Canvas Tote Bag',         'Roomy natural canvas tote with two handles.',                2800, '/products/tote.jpg'),
+  ('10000000-0000-4000-8000-000000000004', 'Stainless Water Bottle',  'Insulated 500 ml bottle, keeps drinks cold.',        3200, '/products/bottle.jpg'),
+  ('10000000-0000-4000-8000-000000000005', 'Wool Beanie',             'Warm ribbed knit beanie, one size fits most.',       1900, '/products/beanie.jpg'),
+  ('10000000-0000-4000-8000-000000000006', 'A5 Ruled Notebook',       '192 lined pages with a grid page, sold with a pencil.',       3400, '/products/notebook.jpg'),
+  ('10000000-0000-4000-8000-000000000007', 'Desk Organiser',          'Separate slots for pens, pencils and scissors.',       2600, '/products/desk.jpg'),
+  ('10000000-0000-4000-8000-000000000008', 'Enamel Pin Set',          'Set of three hard-enamel pins.',                     1200, '/products/pins.jpg'),
+  ('10000000-0000-4000-8000-000000000009', 'Canvas Apron',            'Heavyweight canvas apron with a front pocket.',      4200, '/products/apron.jpg')
 on conflict (id) do update set
   name        = excluded.name,
   description = excluded.description,
