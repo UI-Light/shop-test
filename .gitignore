@@ -38,6 +38,17 @@ yarn-error.log*
 # vercel
 .vercel
 
+# Android signing keys and build output.
+# The .jks file is a private key - treat it exactly like .env.local and never
+# commit it. Losing it means you can no longer ship updates to an already
+# published app.
+*.jks
+*.keystore
+twa/*.apk
+twa/*.aab
+twa/keystore.properties
+android/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

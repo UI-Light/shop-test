@@ -1,0 +1,17 @@
+{
+  "packageId": "com.yourname.shop",
+  "name": "Shop",
+  "host": "shop-test-alpha-ten.vercel.app",
+  "startUrl": "/",
+  "navigationResponse": "default",
+  "launcherName": "Shop",
+  "display": "standalone",
+  "themeColor": "#7C3AED",
+  "navigationColor": "#7C3AED",
+  "iconUrl": "https://shop-test-alpha-ten.vercel.app/icons/maskable-512.png",
+  "appVersionName": "1.0.0",
+  "displayStandaloneWarning": false,
+  "enableNotifications": false,
+  "extractNativeCookies": false,
+  "enableEphemeralWebview": false
+}

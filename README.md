@@ -17,6 +17,8 @@ Google login), Mailgun, deployed on Vercel.
   it follows you between devices and survives logging out.
 - **Checkout.** Order summary and a mock "Place order" button. No card details.
 - **Confirmation.** The order is saved and a summary email is sent.
+- **Installable.** It can be added to a phone's home screen and opens without a
+  browser's address bar. See `twa/README.md` for building an Android `.apk`.
 
 ### Setup
 
@@ -43,5 +45,6 @@ and inserts the products. Then:
 npm run dev      # http://localhost:3000
 ```
 
-Other commands: `npm run build`, `npm run start`, `npm run lint`, and
-`node scripts/fetch-product-photos.mjs` to re-download the product photos.
+Other commands: `npm run build`, `npm run start`, `npm run lint`,
+`node scripts/fetch-product-photos.mjs` to re-download the product photos, and
+`node scripts/make-app-icons.mjs` to redraw the app icons.

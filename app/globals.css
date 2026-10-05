@@ -33,3 +33,24 @@
     }
   }
 }
+/*
+ * Safe areas for phones with a notch or a home indicator.
+ *
+ * These are all 0 in an ordinary browser tab, so nothing changes on the
+ * desktop. They only become non-zero when the shop is opened from the home
+ * screen, which is when the sticky header would otherwise slide underneath the
+ * status bar and the footer would hide behind the home indicator.
+ */
+body {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* The header is the one element pinned to the very top of the screen. */
+header {
+  padding-top: env(safe-area-inset-top);
+}
+
+footer {
+  padding-bottom: env(safe-area-inset-bottom);
+}

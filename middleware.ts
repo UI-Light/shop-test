@@ -61,10 +61,17 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Everything except Next's own assets and the static files in
-  // /public/products (the photos and CREDITS.md). Credits stay readable while
-  // signed out, which is what the CC BY-SA photo licences ask for.
+  // Everything except Next's own assets and the files the browser needs to
+  // install the shop to a phone's home screen.
+  //
+  // - /products/* are the photos and CREDITS.md. Credits stay readable while
+  //   signed out, which is what the CC BY-SA photo licences ask for.
+  // - /manifest.webmanifest, /sw.js and /icons/* are the PWA itself. The
+  //   browser fetches these outside any login session - the service worker in
+  //   particular has to be reachable or the app can never be installed.
+  // - /.well-known/assetlinks.json is how the Android app proves to Chrome
+  //   that it owns this site; it must be readable when signed out too.
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|products/[^/]*\\.(?:svg|png|jpg|jpeg|gif|webp|md)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|manifest\\.webmanifest$|sw\\.js$|icons/|\\.well-known/|products/[^/]*\\.(?:svg|png|jpg|jpeg|gif|webp|md)$).*)",
   ],
 };
