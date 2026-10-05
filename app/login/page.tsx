@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import InstallPrompt from "@/components/InstallPrompt";
 import SubmitButton from "@/components/SubmitButton";
 import { signInWithGoogle } from "./actions";
 import { safeNextPath } from "@/lib/safe-redirect";
@@ -56,6 +57,9 @@ export default async function LoginPage({
       <p className="mt-6 text-sm text-slate-600">
         The shop is only visible once you are signed in.
       </p>
+
+      {/* Appears only once the browser says the shop can be installed. */}
+      <InstallPrompt />
     </div>
   );
 }
